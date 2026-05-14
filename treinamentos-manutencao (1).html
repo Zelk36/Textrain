@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Textrain — Treinamentos em Manutenção Industrial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0f1117;
+    --ink2: #2a2d36;
+    --muted: #6b7280;
+    --surface: #f5f4f0;
+    --white: #ffffff;
+    --accent: #e8500a;
+    --accent2: #c43d00;
+    --steel: #c8c9cc;
+    --border: #e2e0db;
+    --gold: #b88a2e;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--ink);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 22px;
+    color: var(--white); letter-spacing: 1px;
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 13px; font-weight: 600; letter-spacing: .8px;
+    text-transform: uppercase; color: var(--steel);
+    text-decoration: none; transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent); color: var(--white) !important;
+    padding: 8px 18px; border-radius: 3px;
+  }
+  .nav-cta:hover { background: var(--accent2); color: var(--white) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    margin-top: 60px;
+    background: var(--ink);
+    min-height: 92vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-pattern {
+    position: absolute; inset: 0; opacity: .04;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, #fff 39px, #fff 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, #fff 39px, #fff 40px);
+  }
+
+  .hero-left {
+    padding: 80px 6% 80px 8%;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative; z-index: 2;
+  }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(232,80,10,.15);
+    border: 1px solid rgba(232,80,10,.4);
+    color: #f47a44; font-size: 12px; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 2px;
+    margin-bottom: 28px; width: fit-content;
+  }
+
+  .hero-tag::before {
+    content: ''; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: .3; }
+  }
+
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 800; line-height: 1;
+    color: var(--white); letter-spacing: -1px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em {
+    font-style: normal; color: var(--accent);
+    display: block;
+  }
+
+  .hero p {
+    font-size: 17px; color: #9ca3af; line-height: 1.7;
+    max-width: 460px; margin-bottom: 40px;
+  }
+
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--accent); color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px; font-weight: 600;
+    padding: 14px 32px; border: none; border-radius: 3px;
+    cursor: pointer; text-decoration: none;
+    transition: background .2s, transform .1s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent; color: var(--steel);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px; font-weight: 500;
+    padding: 14px 32px;
+    border: 1px solid rgba(200,201,204,.3);
+    border-radius: 3px; cursor: pointer; text-decoration: none;
+    transition: border-color .2s, color .2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--steel); color: var(--white); }
+
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 56px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 38px; font-weight: 800; color: var(--white);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-label {
+    font-size: 12px; color: #6b7280;
+    text-transform: uppercase; letter-spacing: .8px;
+    margin-top: 4px;
+  }
+
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    padding: 60px 8% 60px 4%;
+  }
+
+  .machine-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 8px; padding: 32px;
+    width: 100%; max-width: 400px;
+  }
+
+  .machine-icon-wrap {
+    width: 72px; height: 72px;
+    background: rgba(232,80,10,.12);
+    border: 1px solid rgba(232,80,10,.25);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .machine-icon-wrap svg { width: 36px; height: 36px; }
+
+  .machine-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--white); margin-bottom: 8px;
+  }
+
+  .machine-card p {
+    font-size: 14px; color: #6b7280; margin-bottom: 24px;
+  }
+
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .checklist li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 14px; color: #9ca3af;
+  }
+
+  .checklist li::before {
+    content: ''; flex-shrink: 0;
+    width: 18px; height: 18px; margin-top: 1px;
+    border-radius: 50%;
+    background: rgba(232,80,10,.15);
+    border: 1px solid rgba(232,80,10,.4);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3 8l3.5 3.5L13 5' stroke='%23e8500a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: 12px; background-repeat: no-repeat; background-position: center;
+  }
+
+  /* ── STRIP ── */
+  .strip {
+    background: var(--accent);
+    padding: 18px 8%;
+    display: flex; align-items: center; gap: 48px;
+    overflow: hidden;
+  }
+  .strip-item {
+    display: flex; align-items: center; gap: 10px;
+    white-space: nowrap;
+    font-size: 14px; font-weight: 600;
+    color: rgba(255,255,255,.9); letter-spacing: .3px;
+  }
+  .strip-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  .strip-sep { color: rgba(255,255,255,.35); font-size: 20px; }
+
+  /* ── SECTION BASE ── */
+  section { padding: 96px 8%; }
+
+  .section-label {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800; line-height: 1.05;
+    color: var(--ink); margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 17px; color: var(--muted);
+    max-width: 560px; line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  /* ── SOBRE ── */
+  .about { background: var(--surface); }
+
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+
+  .about-visual {
+    background: var(--ink);
+    border-radius: 6px; padding: 40px;
+    position: relative; overflow: hidden;
+  }
+
+  .about-visual::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: var(--accent);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    opacity: .6;
+  }
+
+  .exp-big {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 100px; font-weight: 800;
+    color: rgba(255,255,255,.06);
+    line-height: 1; margin-bottom: -20px;
+  }
+
+  .exp-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px; font-weight: 700;
+    color: var(--white); line-height: 1.2;
+    margin-bottom: 24px;
+  }
+  .exp-text span { color: var(--accent); }
+
+  .about-badges {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+
+  .badge {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    color: #9ca3af;
+    font-size: 12px; font-weight: 500;
+    padding: 6px 14px; border-radius: 20px;
+  }
+
+  .about-text h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 42px; font-weight: 800;
+    color: var(--ink); line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .about-text h2 span { color: var(--accent); }
+
+  .about-text p {
+    font-size: 16px; color: #4b5563;
+    line-height: 1.8; margin-bottom: 16px;
+  }
+
+  .highlight-bar {
+    border-left: 3px solid var(--accent);
+    padding-left: 16px; margin: 28px 0;
+    font-size: 16px; color: var(--ink); font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* ── SERVIÇOS ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 6px; overflow: hidden;
+  }
+
+  .service-card {
+    background: var(--white);
+    padding: 36px 32px;
+    transition: background .2s;
+    position: relative;
+  }
+
+  .service-card:hover { background: #faf9f7; }
+
+  .service-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 48px; font-weight: 800;
+    color: rgba(0,0,0,.05); line-height: 1;
+    margin-bottom: 12px;
+    position: absolute; top: 24px; right: 28px;
+  }
+
+  .service-icon {
+    width: 44px; height: 44px;
+    background: rgba(232,80,10,.08);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .service-icon svg { width: 22px; height: 22px; }
+
+  .service-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--ink); margin-bottom: 10px;
+  }
+
+  .service-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  .service-tag {
+    display: inline-block; margin-top: 16px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--accent); background: rgba(232,80,10,.08);
+    padding: 4px 10px; border-radius: 2px;
+  }
+
+  /* ── DIFERENCIAIS ── */
+  .diff { background: var(--ink); }
+
+  .diff .section-title { color: var(--white); }
+  .diff .section-sub { color: #6b7280; }
+  .diff .section-label { color: #f47a44; }
+
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+
+  .diff-card {
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 6px; padding: 28px 24px;
+    transition: border-color .2s, background .2s;
+  }
+  .diff-card:hover {
+    border-color: rgba(232,80,10,.4);
+    background: rgba(232,80,10,.04);
+  }
+
+  .diff-icon {
+    width: 40px; height: 40px;
+    background: rgba(232,80,10,.1);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .diff-icon svg { width: 20px; height: 20px; }
+
+  .diff-card h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--white); margin-bottom: 8px;
+  }
+
+  .diff-card p { font-size: 14px; color: #6b7280; line-height: 1.6; }
+
+  /* ── DEPOIMENTOS ── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .testimonial {
+    background: var(--surface);
+    border-radius: 6px; padding: 28px;
+    border-left: 3px solid var(--accent);
+    position: relative;
+  }
+
+  .testimonial::before {
+    content: '"';
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 72px; font-weight: 800;
+    color: var(--accent); opacity: .2;
+    position: absolute; top: 8px; left: 20px;
+    line-height: 1;
+  }
+
+  .testimonial p {
+    font-size: 15px; color: #374151;
+    line-height: 1.7; margin-bottom: 20px;
+    padding-top: 28px;
+  }
+
+  .testimonial-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .author-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; font-weight: 700; color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .author-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .author-role { font-size: 12px; color: var(--muted); }
+
+  /* ── LEAD FORM ── */
+  .lead { background: var(--ink); }
+
+  .lead .section-label { color: #f47a44; }
+  .lead .section-title { color: var(--white); }
+  .lead .section-sub { color: #6b7280; }
+
+  .form-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    max-width: 640px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  .form-group label {
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .8px;
+    color: #9ca3af;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 3px; padding: 12px 16px;
+    color: var(--white); outline: none;
+    transition: border-color .2s, background .2s;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,.25); }
+
+  .form-group select { cursor: pointer; }
+  .form-group select option { background: var(--ink); color: var(--white); }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+    background: rgba(255,255,255,.09);
+  }
+
+  .btn-white {
+    background: var(--accent); color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px; font-weight: 700;
+    padding: 14px 36px; border: none; border-radius: 3px;
+    cursor: pointer; margin-top: 8px;
+    transition: background .2s, transform .1s;
+    letter-spacing: .3px;
+  }
+  .btn-white:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink2);
+    padding: 48px 8%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 24px;
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px; font-weight: 800; color: var(--white);
+    text-decoration: none;
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-copy { font-size: 13px; color: #6b7280; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: #6b7280; text-decoration: none; }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .strip { flex-wrap: wrap; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">Text<span>rain</span></a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#diferenciais">Diferenciais</a></li>
+    <li><a href="#contato" class="nav-cta">Fale Conosco</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">Especialista em Manutenção Industrial</div>
+
+    <h1>
+      Treinamentos que
+      <em>elevam o nível</em>
+      da sua equipe
+    </h1>
+
+    <p>
+      Capacitação técnica especializada em manutenção de lavanderias industriais — com metodologia prática, documentação exclusiva e mais de 4 anos formando profissionais de alto desempenho.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#contato" class="btn-primary">Quero um orçamento</a>
+      <a href="#servicos" class="btn-outline">Ver serviços</a>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">4<span>+</span></div>
+        <div class="stat-label">Anos de atuação</div>
+      </div>
+      <div>
+        <div class="stat-num">200<span>+</span></div>
+        <div class="stat-label">Profissionais treinados</div>
+      </div>
+      <div>
+        <div class="stat-num">100<span>%</span></div>
+        <div class="stat-label">Foco em resultados</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="machine-card">
+      <div class="machine-icon-wrap">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="8" width="28" height="22" rx="3" stroke="#e8500a" stroke-width="2"/>
+          <circle cx="18" cy="19" r="6" stroke="#e8500a" stroke-width="2"/>
+          <circle cx="18" cy="19" r="2" fill="#e8500a"/>
+          <rect x="8" y="4" width="20" height="4" rx="1" stroke="#e8500a" stroke-width="1.5"/>
+          <line x1="8" y1="12" x2="12" y2="12" stroke="#e8500a" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h3>Lavanderia Industrial</h3>
+      <p>Treinamentos e auditorias técnicas cobrindo todo o ciclo de manutenção do equipamento.</p>
+      <ul class="checklist">
+        <li>Diagnóstico e análise de falhas</li>
+        <li>Manutenção preventiva e corretiva</li>
+        <li>Segurança operacional</li>
+        <li>Documentação e registros técnicos</li>
+        <li>Auditorias de conformidade</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-item">
+    <svg viewBox="0 0 18 18" fill="none"><path d="M9 2l1.8 3.6L15 6.3l-3 2.9.7 4.1L9 11.4l-3.7 1.9.7-4.1L3 6.3l4.2-.7z" stroke="white" stroke-width="1.5" fill="none"/></svg>
+    Certificado de participação
+  </div>
+  <span class="strip-sep">·</span>
+  <div class="strip-item">
+    <svg viewBox="0 0 18 18" fill="none"><path d="M9 1L3 4v5c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L9 1z" stroke="white" stroke-width="1.5"/></svg>
+    Conteúdo técnico exclusivo
+  </div>
+  <span class="strip-sep">·</span>
+  <div class="strip-item">
+    <svg viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="white" stroke-width="1.5"/><path d="M6 9h6M6 6h6M6 12h4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Material didático completo
+  </div>
+  <span class="strip-sep">·</span>
+  <div class="strip-item">
+    <svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.5"/><path d="M9 5v4l3 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Turmas in-company e abertas
+  </div>
+</div>
+
+<!-- SOBRE -->
+<section class="about" id="sobre">
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="exp-big">4</div>
+      <div class="exp-text">Anos formando<br><span>especialistas</span></div>
+      <div class="about-badges">
+        <span class="badge">Lavanderias industriais</span>
+        <span class="badge">Manutenção técnica</span>
+        <span class="badge">Auditorias</span>
+        <span class="badge">Treinamentos in-company</span>
+        <span class="badge">Documentação técnica</span>
+        <span class="badge">Diagnóstico de falhas</span>
+      </div>
+    </div>
+
+    <div class="about-text">
+      <p class="section-label">Sobre nós</p>
+      <h2>Experiência que<br><span>faz a diferença</span></h2>
+
+      <p>
+        Com mais de 4 anos de atuação exclusivamente focada em manutenção de lavanderias industriais, nossa empresa nasceu da vivência real no campo — de técnicos que conhecem cada componente, cada falha e cada solução.
+      </p>
+
+      <div class="highlight-bar">
+        "Não ensinamos o que está nos livros. Ensinamos o que aprendemos com as máquinas."
+      </div>
+
+      <p>
+        Nosso acervo técnico exclusivo foi construído ao longo de anos de auditorias, levantamentos e registros de campo, tornando nossos treinamentos os mais completos e práticos disponíveis no mercado.
+      </p>
+
+      <a href="#contato" class="btn-primary" style="margin-top: 28px;">Conhecer os programas</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <p class="section-label">O que oferecemos</p>
+  <h2 class="section-title">Soluções completas<br>para a sua operação</h2>
+  <p class="section-sub">Desde a capacitação da equipe até a auditoria técnica dos processos, atuamos em todas as frentes que impactam a performance dos seus equipamentos.</p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-num">01</span>
+      <div class="service-icon">
+        <svg viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="16" height="16" rx="2" stroke="#e8500a" stroke-width="1.8"/><path d="M7 11l3 3 5-5" stroke="#e8500a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Treinamento Técnico Operacional</h3>
+      <p>Capacitação prática para equipes de manutenção e operadores, com foco em procedimentos corretos, segurança e prolongamento da vida útil dos equipamentos.</p>
+      <span class="service-tag">Presencial · In-company</span>
+    </div>
+
+    <div class="service-card">
+      <span class="service-num">02</span>
+      <div class="service-icon">
+        <svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#e8500a" stroke-width="1.8"/><path d="M11 7v4l3 2" stroke="#e8500a" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <h3>Auditoria de Manutenção</h3>
+      <p>Análise técnica detalhada dos processos de manutenção da sua lavanderia, com relatório de não-conformidades, riscos e plano de ação prioritário.</p>
+      <span class="service-tag">Diagnóstico · Relatório</span>
+    </div>
+
+    <div class="service-card">
+      <span class="service-num">03</span>
+      <div class="service-icon">
+        <svg viewBox="0 0 22 22" fill="none"><path d="M4 17V5h14v12" stroke="#e8500a" stroke-width="1.8" stroke-linecap="round"/><path d="M2 17h18" stroke="#e8500a" stroke-width="1.8" stroke-linecap="round"/><rect x="8" y="9" width="6" height="8" rx="1" stroke="#e8500a" stroke-width="1.5"/></svg>
+      </div>
+      <h3>Manutenção Preventiva</h3>
+      <p>Implementação e revisão de programas de manutenção preventiva, reduzindo paradas não programadas e aumentando a disponibilidade dos equipamentos.</p>
+      <span class="service-tag">Planejamento · Implantação</span>
+    </div>
+
+    <div class="service-card">
+      <span class="service-num">04</span>
+      <div class="service-icon">
+        <svg viewBox="0 0 22 22" fill="none"><path d="M6 4h10M6 8h10M6 12h6" stroke="#e8500a" stroke-width="1.8" stroke-linecap="round"/><circle cx="16" cy="15" r="4" stroke="#e8500a" stroke-width="1.8"/><path d="M14.5 15l1 1 2-2" stroke="#e8500a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Documentação Técnica</h3>
+      <p>Elaboração de manuais, procedimentos operacionais padrão (POP), checklist de inspeção e toda documentação técnica necessária para rastreabilidade e compliance.</p>
+      <span class="service-tag">POP · Manuais · Checklists</span>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section class="diff" id="diferenciais">
+  <p class="section-label">Por que nos escolher</p>
+  <h2 class="section-title">Diferenciais que entregam<br>resultado real</h2>
+  <p class="section-sub">Nossa abordagem vai além do conteúdo teórico. Cada detalhe foi pensado para gerar impacto direto na operação da sua empresa.</p>
+
+  <div class="diff-grid">
+    <div class="diff-card">
+      <div class="diff-icon">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 2l2 5h5l-4 3 1.5 5L10 13l-4.5 2L7 10 3 7h5z" stroke="#e8500a" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </div>
+      <h4>Especialização de nicho</h4>
+      <p>Focados exclusivamente em lavanderias industriais — conhecimento profundo, não superficial. Cada detalhe do nosso conteúdo é específico para o seu mercado.</p>
+    </div>
+
+    <div class="diff-card">
+      <div class="diff-icon">
+        <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="12" rx="2" stroke="#e8500a" stroke-width="1.6"/><path d="M7 9h6M7 12h4" stroke="#e8500a" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+      <h4>Acervo técnico exclusivo</h4>
+      <p>Anos de documentação, registros de campo e levantamentos técnicos consolidados em material didático que você não encontra em nenhum outro lugar.</p>
+    </div>
+
+    <div class="diff-card">
+      <div class="diff-icon">
+        <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="8" r="4" stroke="#e8500a" stroke-width="1.6"/><path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="#e8500a" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+      <h4>Treinador com vivência de campo</h4>
+      <p>Não é professor de sala de aula — é um profissional que esteve nas máquinas, identificou falhas reais e desenvolveu soluções aplicadas na prática.</p>
+    </div>
+
+    <div class="diff-card">
+      <div class="diff-icon">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M4 16V6l6-3 6 3v10l-6 2-6-2z" stroke="#e8500a" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 3v15" stroke="#e8500a" stroke-width="1.6"/></svg>
+      </div>
+      <h4>Formato adaptável</h4>
+      <p>Treinamentos in-company na sua unidade, turmas abertas ou consultoria personalizada — o formato se adapta à sua necessidade e disponibilidade.</p>
+    </div>
+
+    <div class="diff-card">
+      <div class="diff-icon">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M5 10l4 4 6-6" stroke="#e8500a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="10" r="7" stroke="#e8500a" stroke-width="1.6"/></svg>
+      </div>
+      <h4>Resultado mensurável</h4>
+      <p>Nossas auditorias geram relatórios objetivos com indicadores claros. Você sabe exatamente onde estava e onde chegou após a implementação.</p>
+    </div>
+
+    <div class="diff-card">
+      <div class="diff-icon">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 2v4M10 14v4M2 10h4M14 10h4" stroke="#e8500a" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="10" r="3" stroke="#e8500a" stroke-width="1.6"/></svg>
+      </div>
+      <h4>Suporte pós-treinamento</h4>
+      <p>A relação não termina com o certificado. Oferecemos canais de suporte para dúvidas e acompanhamento da aplicação do conteúdo no dia a dia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <p class="section-label">O que dizem</p>
+  <h2 class="section-title">Resultados na prática</h2>
+  <p class="section-sub">Profissionais e empresas que transformaram sua operação com nossos treinamentos.</p>
+
+  <div class="testimonials-grid">
+    <div class="testimonial">
+      <p>Depois do treinamento, nossa equipe passou a identificar falhas antes que virassem paradas de produção. A redução em manutenção corretiva foi imediata e visível já no primeiro mês.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">RC</div>
+        <div>
+          <div class="author-name">Ricardo C.</div>
+          <div class="author-role">Gerente de Manutenção — Lavanderia Hospitalar</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <p>A auditoria foi um divisor de águas. O relatório técnico nos mostrou exatamente os pontos críticos que estávamos ignorando. Muito além do que qualquer consultoria genérica entregaria.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">MF</div>
+        <div>
+          <div class="author-name">Mariana F.</div>
+          <div class="author-role">Diretora de Operações — Rede de Hotéis</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <p>O conteúdo é específico, aprofundado e muito prático. Trabalhamos com lavanderias industriais há 10 anos e ainda aprendemos coisas novas. Recomendo sem hesitar.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">TS</div>
+        <div>
+          <div class="author-name">Thiago S.</div>
+          <div class="author-role">Técnico Sênior — Lavanderia Industrial SP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEAD FORM -->
+<section class="lead" id="contato">
+  <p class="section-label">Entre em contato</p>
+  <h2 class="section-title">Vamos conversar sobre<br>a sua operação</h2>
+  <p class="section-sub">Preencha o formulário e entraremos em contato em até 24 horas com uma proposta personalizada para a sua empresa.</p>
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Nome completo</label>
+      <input type="text" placeholder="Seu nome">
+    </div>
+    <div class="form-group">
+      <label>Empresa</label>
+      <input type="text" placeholder="Nome da empresa">
+    </div>
+    <div class="form-group">
+      <label>WhatsApp</label>
+      <input type="tel" placeholder="(11) 99999-9999">
+    </div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" placeholder="seu@email.com">
+    </div>
+    <div class="form-group full">
+      <label>Qual é sua necessidade?</label>
+      <select>
+        <option value="" disabled selected>Selecione um serviço</option>
+        <option>Treinamento técnico operacional</option>
+        <option>Auditoria de manutenção</option>
+        <option>Manutenção preventiva</option>
+        <option>Documentação técnica</option>
+        <option>Não tenho certeza — quero orientação</option>
+      </select>
+    </div>
+    <div class="form-group full">
+      <button class="btn-white" onclick="alert('Mensagem enviada! Entraremos em contato em breve.')">Solicitar proposta →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a class="footer-logo" href="#">Text<span>rain</span></a>
+  <span class="footer-copy">© 2025 Textrain — Treinamentos em Manutenção Industrial</span>
+  <div class="footer-links">
+    <a href="#sobre">Sobre</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#contato">Contato</a>
+  </div>
+</footer>
+
+</body>
+</html>
